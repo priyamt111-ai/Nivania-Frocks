@@ -22,7 +22,7 @@ export function FeaturedProducts() {
               <Card className="group cursor-pointer border-none shadow-none bg-transparent">
                 <CardContent className="p-0 overflow-hidden relative aspect-[3/4] rounded-sm bg-secondary/20">
                   <img 
-                    src={product.defaultImage} 
+                    src={product.defaultImages[0]} 
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
