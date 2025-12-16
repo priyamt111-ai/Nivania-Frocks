@@ -4,8 +4,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 export function FeaturedProducts() {
-  // Just showing the first product as featured for now, duplicated to fill grid
-  const displayProducts = [...PRODUCTS, ...PRODUCTS]; 
+  // Just showing the products available in data
+  const displayProducts = PRODUCTS; 
 
   return (
     <section className="py-20 bg-background">
