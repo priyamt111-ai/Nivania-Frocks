@@ -10,6 +10,11 @@ import redFrock from '@assets/generated_images/red_satin_kids_frock.png';
 import redFrockBack from '@assets/generated_images/red_satin_frock_back_view.png';
 import redFrockDetail from '@assets/generated_images/red_satin_frock_detail_view.png';
 import floralFrock from '@assets/generated_images/floral_summer_kids_frock.png';
+import floralFrockBack from '@assets/generated_images/floral_white_frock_back_view.png';
+import floralFrockDetail from '@assets/generated_images/floral_white_frock_detail_view.png';
+import floralBlueFrock from '@assets/generated_images/floral_blue_frock_front_view.png';
+import floralBlueFrockBack from '@assets/generated_images/floral_blue_frock_back_view.png';
+import floralBlueFrockDetail from '@assets/generated_images/floral_blue_frock_detail_view.png';
 import velvetDress from '@assets/generated_images/navy_blue_velvet_kids_dress.png';
 import laceGown from '@assets/generated_images/lace_white_christening_gown.png';
 
@@ -68,11 +73,12 @@ export const PRODUCTS: Product[] = [
     price: 2490.00,
     description: "Lightweight cotton frock with hand-painted floral motifs. Perfect for garden parties and sunny days.",
     sizes: ["2-3Y", "4-5Y", "6-7Y"],
-    defaultImages: [floralFrock],
+    defaultImages: [floralFrock, floralFrockBack, floralFrockDetail],
     tags: ["Cotton", "Summer"],
     designDetails: "Hand Painted | Breathable Cotton | Flutter Sleeves",
     colors: [
-      { name: "Garden White", value: "#FFFFFF", images: [floralFrock] }
+      { name: "Garden White", value: "#FFFFFF", images: [floralFrock, floralFrockBack, floralFrockDetail] },
+      { name: "Sky Blue", value: "#87CEEB", images: [floralBlueFrock, floralBlueFrockBack, floralBlueFrockDetail] }
     ]
   },
   {
