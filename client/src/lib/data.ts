@@ -17,6 +17,10 @@ import floralBlueFrockBack from '@assets/generated_images/floral_blue_frock_back
 import floralBlueFrockDetail from '@assets/generated_images/floral_blue_frock_detail_view.png';
 import velvetDress from '@assets/generated_images/navy_blue_velvet_kids_dress.png';
 import laceGown from '@assets/generated_images/lace_white_christening_gown.png';
+import peachButterflyFrock from '@assets/generated_images/peach_butterfly_dress_front_view.png';
+import peachButterflyFrockBack from '@assets/generated_images/peach_butterfly_dress_back_view.png';
+import peachButterflyFrockSide from '@assets/generated_images/peach_butterfly_dress_side_view.png';
+import peachButterflyFrockDetail from '@assets/generated_images/peach_butterfly_dress_detail_view.png';
 
 export interface ProductColor {
   name: string;
@@ -65,6 +69,19 @@ export const PRODUCTS: Product[] = [
       { name: "Rose Pink", value: "#FFB7C5", images: [pinkFrock, pinkFrockBack, pinkFrockDetail] },
       { name: "Powder Blue", value: "#AEC6CF", images: [blueFrock, blueFrockBack, blueFrockDetail] },
       { name: "Ruby Red", value: "#E0115F", images: [redFrock, redFrockBack, redFrockDetail] }
+    ]
+  },
+  {
+    id: "peach-butterfly-gown",
+    name: "Peach Butterfly Gown",
+    price: 4990.00,
+    description: "An enchanting sleeveless party dress featuring 3D butterfly embellishments and a voluminous tulle skirt. Perfect for birthdays and magical celebrations.",
+    sizes: ["3-4Y", "5-6Y", "7-8Y", "9-10Y"],
+    defaultImages: [peachButterflyFrock, peachButterflyFrockBack, peachButterflyFrockSide, peachButterflyFrockDetail],
+    tags: ["Bestseller", "Party Wear"],
+    designDetails: "3D Butterflies | Tulle Layers | Satin Bow | Sleeveless",
+    colors: [
+      { name: "Soft Peach", value: "#FFDAB9", images: [peachButterflyFrock, peachButterflyFrockBack, peachButterflyFrockSide, peachButterflyFrockDetail] }
     ]
   },
   {
