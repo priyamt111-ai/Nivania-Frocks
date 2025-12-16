@@ -3,6 +3,9 @@ import hero2 from '@assets/generated_images/kids_party_wear_group_shot.png';
 import pinkFrock from '@assets/generated_images/pink_satin_kids_frock.png';
 import blueFrock from '@assets/generated_images/blue_satin_kids_frock.png';
 import redFrock from '@assets/generated_images/red_satin_kids_frock.png';
+import floralFrock from '@assets/generated_images/floral_summer_kids_frock.png';
+import velvetDress from '@assets/generated_images/navy_blue_velvet_kids_dress.png';
+import laceGown from '@assets/generated_images/lace_white_christening_gown.png';
 
 export interface ProductColor {
   name: string;
@@ -55,9 +58,31 @@ export const PRODUCTS: Product[] = [
     price: 89.00,
     description: "Lightweight cotton frock with hand-painted floral motifs. Perfect for garden parties and sunny days.",
     sizes: ["2-3Y", "4-5Y", "6-7Y"],
-    defaultImage: hero1, // Using hero image as placeholder for other products
+    defaultImage: floralFrock,
     colors: [
-      { name: "Garden Pink", value: "#FFB7C5", image: hero1 }
+      { name: "Garden White", value: "#FFFFFF", image: floralFrock }
+    ]
+  },
+  {
+    id: "velvet-midnight-elegance",
+    name: "Midnight Velvet Elegance",
+    price: 145.00,
+    description: "Rich navy blue velvet dress with gold ribbon accents. The perfect choice for winter weddings and evening galas.",
+    sizes: ["4-5Y", "6-7Y", "8-9Y", "10-11Y"],
+    defaultImage: velvetDress,
+    colors: [
+      { name: "Navy Blue", value: "#000080", image: velvetDress }
+    ]
+  },
+  {
+    id: "vintage-lace-heirloom",
+    name: "Vintage Lace Heirloom",
+    price: 185.00,
+    description: "Intricate white lace gown inspired by vintage designs. Ideal for christenings, flower girls, or any timeless celebration.",
+    sizes: ["6-12M", "12-18M", "2-3Y"],
+    defaultImage: laceGown,
+    colors: [
+      { name: "Antique White", value: "#FDFDD0", image: laceGown }
     ]
   }
 ];
