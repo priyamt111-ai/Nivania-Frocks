@@ -4,7 +4,7 @@ import { PRODUCTS, Product } from "@/lib/data";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { Ruler, Edit3, Truck, RefreshCcw } from "lucide-react";
+import { Heart, Ruler } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ProductPage() {
@@ -14,7 +14,8 @@ export default function ProductPage() {
   // State for selections
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
-  const [currentImage, setCurrentImage] = useState<string>("");
+  const [currentImages, setCurrentImages] = useState<string[]>([]);
+  const [mainImage, setMainImage] = useState<string>("");
 
   useEffect(() => {
     if (params?.id) {
@@ -24,9 +25,11 @@ export default function ProductPage() {
         // Set defaults
         if (found.colors.length > 0) {
           setSelectedColor(found.colors[0].name);
-          setCurrentImage(found.colors[0].image);
+          setCurrentImages(found.colors[0].images);
+          setMainImage(found.colors[0].images[0]);
         } else {
-          setCurrentImage(found.defaultImage);
+          setCurrentImages(found.defaultImages);
+          setMainImage(found.defaultImages[0]);
         }
         if (found.sizes.length > 0) {
           setSelectedSize(found.sizes[0]);
@@ -35,9 +38,10 @@ export default function ProductPage() {
     }
   }, [params?.id]);
 
-  const handleColorChange = (colorName: string, colorImage: string) => {
+  const handleColorChange = (colorName: string, images: string[]) => {
     setSelectedColor(colorName);
-    setCurrentImage(colorImage);
+    setCurrentImages(images);
+    setMainImage(images[0]);
   };
 
   if (!product) {
@@ -58,133 +62,153 @@ export default function ProductPage() {
       
       <main className="flex-1 pt-8 pb-20">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
-            {/* Left Column - Images */}
-            <div className="space-y-6">
-              <div className="aspect-[3/4] w-full bg-secondary/20 rounded-sm overflow-hidden relative group">
-                <img 
-                  src={currentImage} 
-                  alt={`${product.name} - ${selectedColor}`}
-                  className="w-full h-full object-cover transition-opacity duration-500"
-                  key={currentImage} // Key forces re-render for animation
-                />
+            {/* Left Column - Images Gallery (7 columns) */}
+            <div className="lg:col-span-7 flex flex-col-reverse md:flex-row gap-4">
+              {/* Thumbnails */}
+              <div className="flex md:flex-col gap-4 overflow-x-auto md:overflow-visible">
+                {currentImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setMainImage(img)}
+                    className={cn(
+                      "flex-shrink-0 w-20 h-24 md:w-24 md:h-32 rounded-sm overflow-hidden border-2 transition-all",
+                      mainImage === img ? "border-primary" : "border-transparent hover:border-gray-200"
+                    )}
+                  >
+                    <img src={img} alt={`${product.name} view ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
               </div>
               
-              {/* Thumbnails (Simulated) */}
-              <div className="grid grid-cols-4 gap-4">
-                 {product.colors.map((color) => (
-                   <button
-                     key={color.name}
-                     onClick={() => handleColorChange(color.name, color.image)}
-                     className={cn(
-                       "aspect-square rounded-sm overflow-hidden border-2 transition-all",
-                       selectedColor === color.name ? "border-primary opacity-100" : "border-transparent opacity-70 hover:opacity-100"
-                     )}
-                   >
-                     <img src={color.image} alt={color.name} className="w-full h-full object-cover" />
-                   </button>
-                 ))}
+              {/* Main Image */}
+              <div className="flex-1 aspect-[3/4] bg-secondary/20 rounded-sm overflow-hidden relative">
+                 <img 
+                  src={mainImage} 
+                  alt={`${product.name} - ${selectedColor}`}
+                  className="w-full h-full object-cover transition-opacity duration-300"
+                  key={mainImage}
+                />
               </div>
             </div>
 
-            {/* Right Column - Details */}
-            <div className="flex flex-col">
-              <div className="mb-8">
-                <h1 className="font-serif text-4xl font-bold text-foreground mb-2">{product.name}</h1>
-                <p className="text-2xl font-light text-muted-foreground">${product.price.toFixed(2)}</p>
+            {/* Right Column - Details (5 columns) */}
+            <div className="lg:col-span-5 flex flex-col space-y-8">
+              
+              {/* Header Info */}
+              <div>
+                <div className="flex gap-2 mb-4">
+                  {product.tags?.map(tag => (
+                     <span key={tag} className={cn(
+                       "px-3 py-1 text-xs font-medium rounded-full",
+                       tag === "New" ? "bg-green-100 text-green-800" : "bg-orange-100 text-orange-800"
+                     )}>
+                       {tag}
+                     </span>
+                  ))}
+                </div>
+                
+                <h1 className="font-sans text-2xl md:text-3xl font-normal text-foreground mb-2">{product.name} - {selectedColor}</h1>
+                <div className="flex items-baseline gap-2">
+                  <p className="text-xl font-medium text-foreground">₹{product.price.toLocaleString()}</p>
+                  <span className="text-sm text-muted-foreground">Incl. of all taxes</span>
+                </div>
               </div>
 
-              <div className="space-y-8 flex-1">
-                {/* Color Selection */}
-                <div>
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-sm font-medium uppercase tracking-wide">Color: <span className="text-primary">{selectedColor}</span></span>
-                  </div>
-                  <div className="flex gap-3">
-                    {product.colors.map((color) => (
-                      <button
-                        key={color.name}
-                        onClick={() => handleColorChange(color.name, color.image)}
-                        className={cn(
-                          "w-10 h-10 rounded-full border-2 p-1 transition-all",
-                          selectedColor === color.name ? "border-primary" : "border-transparent hover:border-gray-200"
-                        )}
-                        title={color.name}
-                      >
-                        <div 
-                          className="w-full h-full rounded-full border border-black/10" 
-                          style={{ backgroundColor: color.value }}
-                        />
-                      </button>
-                    ))}
-                  </div>
+              {/* Color Selection */}
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-sm font-medium">Select Color</span>
                 </div>
-
-                {/* Size Selection */}
-                <div>
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-sm font-medium uppercase tracking-wide">Size</span>
-                    <button className="text-xs text-muted-foreground underline flex items-center gap-1 hover:text-foreground">
-                      <Ruler className="w-3 h-3" /> Size Guide
+                <div className="flex gap-3">
+                  {product.colors.map((color) => (
+                    <button
+                      key={color.name}
+                      onClick={() => handleColorChange(color.name, color.images)}
+                      className={cn(
+                        "w-12 h-12 rounded-full border-2 p-0.5 transition-all relative",
+                        selectedColor === color.name ? "border-foreground" : "border-transparent hover:border-gray-300"
+                      )}
+                      title={color.name}
+                    >
+                      <div 
+                        className="w-full h-full rounded-full border border-black/10" 
+                        style={{ backgroundColor: color.value }}
+                      />
+                      {selectedColor === color.name && (
+                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div className="w-2 h-2 bg-white rounded-full shadow-sm" />
+                         </div>
+                      )}
                     </button>
-                  </div>
-                  <div className="grid grid-cols-4 gap-3">
-                    {product.sizes.map((size) => (
-                      <button
-                        key={size}
-                        onClick={() => setSelectedSize(size)}
-                        className={cn(
-                          "py-3 text-sm border transition-all",
-                          selectedSize === size 
-                            ? "border-primary bg-primary/5 text-primary font-medium" 
-                            : "border-input hover:border-foreground/50 text-foreground"
-                        )}
-                      >
-                        {size}
-                      </button>
-                    ))}
-                  </div>
+                  ))}
                 </div>
+              </div>
 
-                {/* Edit Design / Customization Link */}
-                <div className="border-t border-b py-6 border-dashed">
-                  <button className="w-full flex items-center justify-between text-left group">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-secondary rounded-full text-foreground group-hover:bg-primary group-hover:text-white transition-colors">
-                        <Edit3 className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <span className="font-medium block group-hover:text-primary transition-colors">Customize Design</span>
-                        <span className="text-xs text-muted-foreground">Add sleeves, change length, or add embroidery</span>
-                      </div>
-                    </div>
-                    <span className="text-primary text-sm font-medium underline">Edit</span>
+              {/* Size Selection */}
+              <div>
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-sm font-medium">Select Standard Size</span>
+                  <button className="text-xs text-primary font-medium uppercase tracking-wide hover:underline">
+                    Size Guide
                   </button>
                 </div>
-
-                {/* Actions */}
-                <div className="pt-4 space-y-4">
-                  <Button size="lg" className="w-full h-14 text-lg rounded-none bg-foreground hover:bg-foreground/90">
-                    Add to Cart - ${(product.price).toFixed(2)}
-                  </Button>
-                  
-                  <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground pt-4">
-                    <div className="flex items-center gap-2 justify-center">
-                      <Truck className="w-4 h-4" /> Free Shipping over $150
-                    </div>
-                    <div className="flex items-center gap-2 justify-center">
-                      <RefreshCcw className="w-4 h-4" /> 30-Day Returns
-                    </div>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <div className="pt-8 text-sm leading-relaxed text-muted-foreground">
-                  <h4 className="font-serif text-foreground text-lg mb-2">Description</h4>
-                  <p>{product.description}</p>
+                <div className="flex flex-wrap gap-3">
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={cn(
+                        "w-12 h-12 rounded-full flex items-center justify-center text-sm border transition-all",
+                        selectedSize === size 
+                          ? "bg-foreground text-background border-foreground" 
+                          : "bg-transparent border-gray-200 text-foreground hover:border-gray-400"
+                      )}
+                    >
+                      {size.replace('Y', '')}
+                    </button>
+                  ))}
                 </div>
               </div>
+
+              {/* Custom Size Option */}
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm text-foreground">Prefer a Custom Size?</span>
+                <button className="text-xs text-primary font-medium uppercase tracking-wide hover:underline">
+                  Add Custom Size
+                </button>
+              </div>
+
+              <div className="h-px bg-gray-100 w-full" />
+
+              {/* Design Details Box */}
+              <div className="border border-gray-200 rounded-lg p-6 space-y-4">
+                 <div>
+                    <h3 className="text-base font-medium mb-1">Design Details</h3>
+                    <p className="text-sm text-muted-foreground">{product.designDetails || "Standard Fit | Premium Fabric"}</p>
+                 </div>
+                 
+                 <Button variant="outline" className="w-full rounded-full h-12 text-sm font-medium border-foreground text-foreground hover:bg-gray-50 uppercase tracking-wide">
+                    Edit Design
+                 </Button>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 pt-2">
+                <Button className="flex-1 rounded-full h-14 text-sm font-medium bg-foreground text-background hover:bg-foreground/90 uppercase tracking-wide">
+                  Add to Bag
+                </Button>
+                <Button variant="outline" className="w-14 h-14 rounded-full border-gray-200 text-foreground hover:border-gray-400 p-0 flex items-center justify-center">
+                  <Heart className="w-5 h-5" />
+                </Button>
+              </div>
+
+              {/* Description Text */}
+              <div className="pt-4 text-sm leading-relaxed text-muted-foreground">
+                 <p>{product.description}</p>
+              </div>
+
             </div>
           </div>
         </div>
